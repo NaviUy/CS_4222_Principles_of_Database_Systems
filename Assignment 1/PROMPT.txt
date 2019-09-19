@@ -1,0 +1,25 @@
+Use Company database, use MySQL to finish following queries.
+
+(Please: A. Demonstrate your SQL script to the instructor in the class meeting on September 19th.
+
+              B. submit a report of both the SQL script and the execution result.)
+
+(1) Retrieve the names of employees in department 5 who work more than 10 hours per week on the 'ProductX' project.
+
+(2) List the names of employees who have a dependent with the same first name as themselves.
+
+(3) Find the names of employees that are directly supervised by 'Franklin Wong'.
+
+(4) For each project, list the project name and the total hours per week (by all employees) spent on that project.
+
+(5) Retrieve the names of employees who work on every project of JPL.
+
+(6) Retrieve the names of employees who do not work on any project of JPL.
+
+(7) For each department, retrieve the department name, and the average salary of employees working in that department.
+
+(8) Retrieve the average (total) working hour (on all projects) of all female employees.
+
+(9) Find the names and addresses of employees who work on at least one project located in Houston but whose department has no location in Houston.
+
+(10) List the last names of department managers who have no dependents.
