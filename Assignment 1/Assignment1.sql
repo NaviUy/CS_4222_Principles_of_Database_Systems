@@ -16,7 +16,17 @@ SELECT Pname, Sum(Hours) FROM project, works_on WHERE Pno = Pnumber GROUP BY Pnu
 
 --(5) Retrieve the names of employees who work on every project of JPL.
 
-SELECT Fname from employee WHERE Ssn IN (SELECT DISTINCT Essn FROM works_on WHERE Pno IN (SELECT Pno FROM client WHERE Cname = "JPL"));
+SELECT Fname 
+FROM EMPLOYEE
+WHERE NOT EXISTS (SELECT *
+FROM WORKS_ON B
+WHERE(B.Pno IN (SELECT Pno 
+FROM CLIENT WHERE CName = "JPL")
+AND
+NOT EXISTS ( SELECT * 
+FROM WORKS_ON C
+WHERE C.Essn = Ssn
+AND C.Pno = B.Pno)));
 
 --(6) Retrieve the names of employees who do not work on any project of JPL.
 
