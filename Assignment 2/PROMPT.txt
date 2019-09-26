@@ -1,0 +1,21 @@
+Use Company database, use MySQL to finish following queries.
+
+(Please: A. Demonstrate your SQL script to the instructor in the class meeting on September 26th.
+
+              B. submit a report of both the SQL script and the execution result.)
+
+1. List the department managers who are controlling more than 2 projects.
+
+2. Retrieve the names of the departments that only located in ‘Houston’.
+
+3. List the names of employees all of whose dependents were born before 1960.
+
+4. List the names of departments managed by the direct subordinate of the manager of ‘Headquarters’ department.
+
+5. Retrieve the average salary of male employees who work totally no less than 50 hours on projects.
+
+6. Find the names of projects that all direct subordinates of James Borg work for.
+
+7. Show the name of employee who and whose supervisor are in different departments.
+
+8. Find the name of employee who only has spouse as the dependent.
