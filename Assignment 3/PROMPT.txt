@@ -1,0 +1,19 @@
+All questions are based on Company database. Before you start, I recommend you to create a new copy of Company schema, and test your solution of following 8 questions on this new and clean copy.
+
+For this assignment, you can turn in only SQL file.
+
+1. Create a prepared statement to display all employees' names in the department ? (Dno) .
+
+2. Define a procedure to display all Clients (Cname) who have some project with Department 5.
+
+3. Create a procedure to display the number of employees in the department, using Dno as the IN variable.
+
+4. Create a procedure to select the total number of projects of a department, using Dname as the IN variable, and define an OUT variable for the number of projects.
+
+5. Create a trigger on WORKS_ON, if a new tuple with Hours=NULL is inserted, set the Hours to 0.
+
+6. Create a table with attributes SSN, dependent_name and ChangeTimeStamp, whenever a new tuple is inserted into DEPENDENT table, record the operation using a trigger.
+
+7. Create a trigger on CLIENT, whenever a tuple is deleted, delete all the tuples in PROJECT table and WORKS_ON table with the same Pno as the deleted tuple from CLIENT.
+
+8. Create a trigger on EMPLOYEE, whenever a new employee is inserted, if the employee has salary higher than his/her supervisor, set the employee's salary to NULL.
