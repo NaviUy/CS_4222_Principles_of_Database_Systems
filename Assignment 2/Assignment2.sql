@@ -32,13 +32,19 @@ NOT Dname =
 			
 -- 3. List the names of employees all of whose dependents were born before 1960.
  
-SELECT Fname, Lname
+-- SELECT Fname, Lname
+-- FROM EMPLOYEE
+-- WHERE Ssn 
+-- 	IN(SELECT Essn 
+-- 	FROM DEPENDENT 
+-- 	WHERE YEAR(Bdate) < 1960);
+
+SELECT Fname, Lname, Dependent_name
 FROM EMPLOYEE
-WHERE Ssn 
-	IN(SELECT Essn 
-	FROM DEPENDENT 
-	WHERE YEAR(Bdate) < 1960);
-  		
+LEFT JOIN DEPENDENT
+ON Ssn = Essn
+WHERE Essn IN (SELECT Essn FROM DEPENDENT WHERE YEAR(DEPENDENT.Bdate) < 1960) 
+AND NOT Essn IN (SELECT Essn FROM DEPENDENT WHERE YEAR(DEPENDENT.Bdate) > 1960);
 
 -- 4. List the names of departments managed by the direct subordinate of the manager of ‘Headquarters’ department.
 
@@ -67,15 +73,28 @@ WHERE Ssn
 
 -- 6. Find the names of projects that all direct subordinates of James Borg work for.
 
+-- SELECT Pname
+-- FROM PROJECT
+-- WHERE Dnum
+-- 	 IN (SELECT Dno
+-- 	 FROM EMPLOYEE
+-- 	 WHERE Super_ssn
+-- 	 	IN(SELECT Ssn
+-- 	 	FROM EMPLOYEE
+-- 	 	WHERE Fname = "James" AND Lname = "Borg"));
+
 SELECT Pname
 FROM PROJECT
-WHERE Dnum
-	 IN (SELECT Dno
-	 FROM EMPLOYEE
-	 WHERE Super_ssn
-	 	IN(SELECT Ssn
-	 	FROM EMPLOYEE
-	 	WHERE Fname = "James" AND Lname = "Borg"));
+WHERE Pnumber
+	IN(SELECT Pno FROM WORKS_ON A
+	WHERE Essn
+		IN(SELECT Ssn FROM EMPLOYEE
+		WHERE Super_ssn
+			IN(SELECT Ssn FROM EMPLOYEE WHERE Fname = "James" AND Lname = "Borg"))
+		GROUP BY Pno
+		HAVING COUNT(Pno) = (SELECT COUNT(Ssn) FROM EMPLOYEE WHERE Super_ssn 
+			IN(SELECT Ssn FROM EMPLOYEE WHERE Fname = "James" AND Lname = "Borg")));
+		
  
 -- 7. Show the name of employee who and whose supervisor are in different departments.
 
