@@ -1,0 +1,26 @@
+DROP TRIGGER `checkReturn`; 
+delimiter //
+CREATE TRIGGER `checkReturn`
+BEFORE INSERT
+ON `RETURNSTRACKER`
+FOR EACH ROW
+BEGIN
+	IF((SELECT CURDATE()) = (SELECT Loan_date FROM LOAN WHERE LOAN.LoanID = NEW.LoanID))
+		THEN 
+			SIGNAL SQLSTATE '45000' 
+			SET MESSAGE_TEXT = 'Cannot return book on the same day!';
+    ELSEIF(NEW.BranchID != (SELECT BranchID FROM LOAN WHERE LOAN.LoanID = NEW.LoanID))
+		THEN
+			SIGNAL SQLSTATE '45000' 
+			SET MESSAGE_TEXT = 'Has to be returned in the same branch!';
+	ELSEIF EXISTS(SELECT * FROM RETURNSTRACKER WHERE RETURNSTRACKER.LoanID = NEW.LoanID)
+		THEN
+			SIGNAL SQLSTATE '45000' 
+			SET MESSAGE_TEXT = 'Book was already returned!';
+	ELSEIF EXISTS(SELECT * FROM PASTDUE WHERE PASTDUE.LoanID = NEW.LoanID)
+		THEN
+			SIGNAL SQLSTATE '45000' 
+			SET MESSAGE_TEXT = 'Contains Past Due!';
+    END IF;
+END; //
+delimiter ;

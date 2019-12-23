@@ -1,0 +1,24 @@
+-- DROP PROCEDURE INQUIRYOfficer()
+delimiter //
+CREATE PROCEDURE INQUIRYOfficer(
+	IN Borrower INT,
+    IN Staff INT,
+    IN Book INT)
+BEGIN
+	IF((SELECT Type_of_person FROM UNIVERSITY_PERSON WHERE UNIVERSITY_PERSON.ID = Staff) = 'Staff')
+		THEN
+			IF(Borrower IS NOT null)
+				THEN
+ 				SELECT * FROM LOAN WHERE LOAN.PersonID = Borrower AND LOAN.LoanID NOT IN (SELECT LoanID FROM RETURNSTRACKER);
+ 				SELECT COUNT(*) FROM LOAN WHERE LOAN.PersonID = Borrower AND LOAN.LoanID NOT IN (SELECT LoanID FROM RETURNSTRACKER);
+			END IF;
+            IF(Book IS NOT null)
+				THEN
+                SELECT * FROM BOOK WHERE BOOK.BookID = Book;
+            END IF;
+	ELSE
+		SIGNAL SQLSTATE '45000' 
+		SET MESSAGE_TEXT = 'NOT A STAFF';
+	END IF;
+END; //
+delimiter ;

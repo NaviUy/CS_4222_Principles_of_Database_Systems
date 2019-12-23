@@ -1,0 +1,55 @@
+-- #1
+SELECT * FROM BOOKBYEE;
+
+-- #2
+SELECT AVG(theCount) FROM 
+(SELECT COUNT(B.ID) as theCount 
+FROM LOAN A LEFT JOIN UNIVERSITY_PERSON B 
+ON A.PersonID = B.ID WHERE B.Type_of_person = 'Graduate' AND B.Department = 'Computer Science' 
+GROUP BY A.PersonID) temporaryAlias;
+
+
+-- #3
+CALL pastDueAdd();
+SELECT * FROM UNIVERSITY_PERSON 
+WHERE ID IN (SELECT PersonID FROM LOAN WHERE LOAN.LoanID IN (SELECT LoanID FROM PASTDUE));
+
+-- #4
+SELECT BranchName FROM BRANCH WHERE BRANCH.BranchID IN 
+(SELECT A.BranchID as DISTINCTBRANCHID FROM LOAN A LEFT JOIN UNIVERSITY_PERSON B 
+ON A.PersonID = B.ID 
+WHERE B.Department = 'Computer Science' AND B.Type_of_person = 'Faculty' 
+GROUP BY A.BranchID 
+HAVING COUNT(Distinct A.PersonID) = 
+(SELECT COUNT(ID) FROM UNIVERSITY_PERSON C WHERE C.Type_of_person = 'Faculty' AND C.Department = 'Computer Science'));
+
+-- #5
+SELECT Book_name FROM BOOK WHERE BOOK.BookID IN 
+(SELECT BookID FROM BRANCH_COPIES WHERE BRANCH_COPIES.BranchID = 2) 
+AND BOOK.BookID NOT IN (SELECT BookID FROM BRANCH_COPIES WHERE BRANCH_COPIES.BranchID = 1 
+OR BRANCH_COPIES.BranchID = 3);
+
+-- #6
+SELECT Fname, Lname FROM UNIVERSITY_PERSON 
+WHERE UNIVERSITY_PERSON.ID IN
+(SELECT PersonID FROM LOAN WHERE Loan.Extension = 1 AND LOAN.LoanID NOT IN (SELECT LoanID FROM RETURNSTRACKER)) 
+AND UNIVERSITY_PERSON.Department = 'Finance';
+
+-- #7
+SELECT Book_name FROM BOOK WHERE BookID IN 
+(SELECT BookID FROM BRANCH_COPIES WHERE BRANCH_COPIES.BranchID = 3 
+AND BRANCH_COPIES.Category = 'New' AND Available = 'Available');
+
+-- #8
+SELECT A.BranchID, C.BranchName, COUNT(E.Publisher_name), E.Publisher_name FROM BRANCH_COPIES A 
+LEFT JOIN BRANCH C ON A.BranchID = C.BranchID
+LEFT JOIN BOOK D ON A.BookID = D.BookID
+LEFT JOIN PUBLISHER E ON D.PublisherID = E.PublisherID
+GROUP BY A.BranchID, E.Publisher_name
+HAVING
+COUNT(E.Publisher_name) = (SELECT MAX(myCOUNT)
+FROM (SELECT COUNT(Publisher_name) as myCount FROM BRANCH_COPIES B 
+LEFT JOIN BOOK F ON B.BookID = F.BookID
+LEFT JOIN PUBLISHER G ON F.PublisherID = G.PublisherID
+GROUP BY B.BranchID, G.PublisherID HAVING B.BranchID = A.BranchID) tempAlias);
+
